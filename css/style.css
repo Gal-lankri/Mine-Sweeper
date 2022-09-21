@@ -1,0 +1,12 @@
+.hidden {
+  display: none;
+}
+table,
+td {
+    margin: auto;
+  border:3px solid black;
+
+}
+.cell{
+    text-align: center;
+}
