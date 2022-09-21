@@ -9,6 +9,7 @@ const EMPTY = ""
 const HAPPY_FACE = "😃"
 const SHOCK_FACE = "😲"
 const COOL_FACE = "😎"
+var gBoard
 
 const G_GAME = {
   isOn: false,
@@ -20,31 +21,32 @@ const gLevel = {
   size: 4,
   mines: 2,
 }
-var gBoard
 
 function initGame() {
   gBoard = buildBoard(gLevel.size)
-  getRandomMines()
+//   getRandomMines()
   renderBoard(gBoard, ".board-container")
-  putMines(gBoard)
-  setMinesNegsCount(gBoard, rowIdx, colIdx)
+  renderMines(gBoard)
+
   console.log(gBoard)
 }
 
 function buildBoard(size) {
   const board = []
+  var count = 0
   for (var i = 0; i < size; i++) {
     board[i] = []
     for (var j = 0; j < size; j++) {
       board[i][j] = {
         minesAroundCount: 0,
         isShown: true,
-        isMine: false,
+        isMine: Math.random() > 0.8 ? true : false,
         isMarked: true,
       }
+      if (board[i][j].isMine) count++
+      if (count > gLevel.mines) board[i][j].isMine = false
     }
   }
-  
 
   return board
 }
