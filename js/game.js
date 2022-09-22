@@ -135,7 +135,6 @@ function cellClicked(elCell, i, j) {
   elSpan[0].classList.remove("hidden-content")
 
   if (checkGameOver()) {
-    debugger
     // if win !
     clearInterval(gInterval)
     var selGameOver = document.querySelector(".game-over")
