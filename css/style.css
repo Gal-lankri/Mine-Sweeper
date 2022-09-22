@@ -1,12 +1,92 @@
-.hidden {
-  display: none;
+* {
+  margin: auto;
+  text-align: center;
 }
-table,
-td {
-    margin: auto;
-  border:3px solid black;
+body {
+  background-color: aquamarine;
+}
+
+h1 {
+  font-family: "Bungee Spice", cursive;
+  border: 1px solid black;
+  padding: 10px;
+  font-size: 50px;
+  background-color: rgba(45, 68, 110, 0.678);
+  margin: 20px auto;
+}
+
+table,tr ,td {
+  background-color: rgb(39, 39, 189);
+  margin-bottom: 20px;
+  cursor: crosshair;
+  border-collapse: collapse;
+  height:max-content;
+  width:max-content;
+  border: 3px outset black;
+}
+button {
+  margin: 5px;
+  font-family: "Fira Sans", sans-serif;
+  font-size: larger;
+  padding: 5px;
+  border-radius: 10px;
+  background-color: rgba(4, 103, 233, 0.904);
+  color: rgb(231, 138, 31);
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: aqua;
+}
+
+.game-over {
+  
+  text-align: center;
+  background-color: black;
+  padding: 10px;
+  cursor: pointer;
+  margin: auto;
+  height: 20x;
+  width: 20px;
+  
 
 }
-.cell{
-    text-align: center;
+
+.board-container {
+  margin-top: 20px;
+  width: max-content;
+}
+
+.footer {
+  height: 50px;
+  background-color: rgb(9, 120, 124);
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+.buttons-container {
+  margin-top: 2px;
+}
+.timer-container {
+  font-family: "Fira Sans", sans-serif;
+  position: fixed;
+  right: 20px;
+  border: 2px solid black;
+  font-size: large;
+  background-color: rgb(255, 135, 23);
+  color: black;
+  height: 50px;
+  width: 100px;
+}
+
+.hidden-content {
+  visibility: hidden;
+}
+.hidden-flag {
+  visibility: hidden;
+}
+
+.marked {
+  background-color: rgba(100, 148, 237, 0.507);
 }
