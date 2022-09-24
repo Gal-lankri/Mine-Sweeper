@@ -15,15 +15,23 @@ h1 {
   margin: 20px auto;
 }
 
-table,tr ,td {
-  background-color: rgb(39, 39, 189);
+table {
+  table-layout: fixed;
+  width: 50%;
+  background-color: rgb(105, 105, 236);
   margin-bottom: 20px;
   cursor: crosshair;
   border-collapse: collapse;
-  height:max-content;
-  width:max-content;
-  border: 3px outset black;
+  border: 1px outset black;
 }
+
+td {
+  box-sizing: content-box;
+  border: 1px outset black;
+  padding: 10px 0;
+  width: 33%;
+}
+
 button {
   margin: 5px;
   font-family: "Fira Sans", sans-serif;
@@ -40,7 +48,6 @@ button:hover {
 }
 
 .game-over {
-  
   text-align: center;
   background-color: black;
   padding: 10px;
@@ -48,13 +55,12 @@ button:hover {
   margin: auto;
   height: 20x;
   width: 20px;
-  
-
 }
 
 .board-container {
   margin-top: 20px;
-  width: max-content;
+  width: 30%;
+  height: 30%;
 }
 
 .footer {
@@ -87,6 +93,6 @@ button:hover {
   visibility: hidden;
 }
 
-.marked {
+.clicked {
   background-color: rgba(100, 148, 237, 0.507);
 }

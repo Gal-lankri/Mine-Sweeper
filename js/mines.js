@@ -40,16 +40,17 @@ function expandShown(board, elCell, rowIdx, colIdx) {
     for (var j = colIdx - 1; j <= colIdx + 1; j++) {
       if (j < 0 || j >= board[0].length) continue
       if (i === rowIdx && j === colIdx) continue
-      if (board[i][j].isMine) return
       var currCell = board[i][j]
-      if (!currCell.isShown) {
+      if (currCell.isMine) continue
+      if (currCell.isMarked) continue
+      else if (!currCell.isShown) {
         currCell.isShown = true
         G_GAME.shownCount++
+        var currElCell = document.querySelector(`.cell-${i}-${j}`) 
+        currElCell.classList.add("clicked")
+        var elSpan = currElCell.getElementsByTagName("span")
+        elSpan[0].classList.remove("hidden-content")
       }
-      var currCellEl = document.querySelector(`.cell-${i}-${j}`)
-      currCellEl.classList.add("marked")
-      var elSpan = currCellEl.getElementsByTagName("span")
-      elSpan[0].classList.remove("hidden-content")
     }
   }
 }

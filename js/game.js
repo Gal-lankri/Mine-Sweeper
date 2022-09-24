@@ -72,7 +72,7 @@ function buildBoard(size) {
 }
 // update the DOM
 function renderBoard(gBoard, selector) {
-  var strHTML = '<table border="3"><tbody>'
+  var strHTML = "<table><tbody>"
   for (var i = 0; i < gBoard.length; i++) {
     strHTML += "<tr>"
     for (var j = 0; j < gBoard[0].length; j++) {
@@ -103,18 +103,16 @@ function checkGameOver() {
 }
 
 function cellClicked(elCell, i, j) {
-  G_GAME.shownCount++
-  console.log(G_GAME.shownCount)
+  //  Marked cell can't be clicked
+  if (gBoard[i][j].isMarked) return
   // if step on a mine
   if (gBoard[i][j].isMine) {
     clearInterval(gInterval)
     var selGameOver = document.querySelector(".game-over")
     selGameOver.innerText = SHOCK_FACE
   }
-
-  //  Marked cell can't be clicked
-  elCell.classList.add("marked")
-  if (gBoard[i][j].isMarked) return
+  G_GAME.shownCount++
+  elCell.classList.add("clicked")
   // Checked if it is te first click
   gFirstClick++
   if (gFirstClick === 1) {
@@ -144,13 +142,17 @@ function cellClicked(elCell, i, j) {
 function cellMarked(elCell, ev, i, j) {
   // checked if it is the right button on the mouse
   if (ev.button === 2) {
-    G_GAME.markedCount++
-    console.log(G_GAME.markedCount)
-    console.log(ev)
     if (gBoard[i][j].isShown) return
-    gBoard[i][j].isMarked = true
-    var elSpan = elCell.getElementsByTagName("span")
-    elSpan[1].classList.remove("hidden-flag")
+    if (gBoard[i][j].isMarked) {
+      G_GAME.markedCount--
+      gBoard[i][j].isMarked = false
+      var elSpan = elCell.getElementsByTagName("span")
+      elSpan[1].classList.remove("hidden-flag")
+    } else {
+      G_GAME.markedCount++
+      gBoard[i][j].isMarked = true
+      elSpan[1].classList.add("hidden-flag")
+    }
   }
 }
 
