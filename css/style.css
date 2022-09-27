@@ -17,39 +17,36 @@ h1 {
 }
 
 .beginner-table {
-  padding-top: 10px;
+  border: 1px outset rgb(0, 0, 0);
   table-layout: fixed;
   width: 50%;
-  /* background-color: rgb(67, 67, 153); */
+  background-color: grey;
   margin-bottom: 20px;
   cursor: crosshair;
   border-spacing: 3px;
-  border-radius: 5%;
-  /* border-collapse: collapse; */
+  border-radius: 2%;
 }
 
 .medium-table {
-  padding-top: 10px;
+  border: 1px outset rgb(0, 0, 0);
   table-layout: fixed;
   width: 100%;
-  /* background-color: rgb(67, 67, 153); */
+  background-color: grey;
   margin-bottom: 20px;
   cursor: crosshair;
   border-spacing: 3px;
-  border-radius: 5%;
-  /* border-collapse: collapse; */
+  border-radius: 2%;
 }
 
 .expert-table {
-  padding-top: 10px;
+  border: 1px outset rgb(0, 0, 0);
   table-layout: fixed;
   width: 100%;
-  /* background-color: rgb(67, 67, 153); */
+  background-color: grey;
   margin-bottom: 20px;
   cursor: crosshair;
   border-spacing: 3px;
-  border-radius: 5%;
-  /* border-collapse: collapse; */
+  border-radius: 2%;
 }
 
 .board-container {
@@ -64,20 +61,11 @@ td {
   text-align: center;
   background-color: rgb(65, 29, 150);
   border-style: outset;
-  /* height: 30px; */
-}
-
-.beginner-td {
   height: 30px;
   width: 30px;
 }
-.medium-td {
-  height: 30px;
-  width: 30px;
-}
-.expert-td {
-  height: 30px;
-  width: 30px;
+td:hover {
+  background-color: rgb(111, 49, 255);
 }
 
 button {
@@ -103,14 +91,6 @@ button:hover {
   padding: 10px;
 }
 
-.footer {
-  height: 50px;
-  background-color: rgb(9, 120, 124);
-  position: relative;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-}
 .buttons-container {
   margin-top: 2px;
 }
@@ -134,7 +114,7 @@ button:hover {
   background-color: rgb(255, 135, 23);
   color: black;
   height: 50px;
-  width: 100px;
+  width: 150px;
 }
 
 .hidden-content {

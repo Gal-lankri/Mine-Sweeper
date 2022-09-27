@@ -18,7 +18,9 @@ const COOL_FACE = "😎"
 var gBoard
 var gInterval
 var gFirstClick = 0
-var gMinesStepCount = 0
+var gMinesStepCount = 2
+var finishGameAudio = new Audio("sounds/finish_game.mp3")
+var stepOnMineAudio = new Audio("sounds/step-on-mine.mp3")
 
 const g_Game = {
   isOn: false,
@@ -30,13 +32,22 @@ const gLevel = {
   size: 4,
   mines: 2,
 }
+
 function resetG_Game() {
   g_Game.markedCount = 0
   g_Game.shownCount = 0
   g_Game.secsPassed = 0
   var elLives = document.getElementById("hearts")
-  elLives.innerText = HEART + HEART + HEART
-  gMinesStepCount = 0
+  if (gLevel.size === BEGINNER_LEVEL) {
+    elLives.innerText = HEART + HEART
+    gMinesStepCount = 2
+    gLevel.mines = 2
+  } else {
+    elLives.innerText = HEART + HEART + HEART
+    gMinesStepCount = 3
+    if (gLevel.size === MEDIUM_LEVEL) gLevel.mines = 14
+    if (gLevel.size === EXTREME_LEVEL) gLevel.mines = 32
+  }
 }
 
 function initGame() {
@@ -50,8 +61,6 @@ function initGame() {
   gBoard = buildBoard(gLevel.size)
 
   renderBoard(gBoard, ".board-container")
-
-  console.log(gBoard)
 }
 
 // build the model
@@ -69,15 +78,6 @@ function buildBoard(size) {
       }
     }
   }
-  // getRandomMines(board, gLevel)
-  // // setting the Neighbors of the mines
-  // for (var i = 0; i < board.length; i++) {
-  //   for (var j = 0; j < board[i].length; j++) {
-  //     if (board[i][j].isMine) {
-  //       setMinesNegsCount(board, i, j)
-  //     }
-  //   }
-  // }
 
   return board
 }
@@ -99,9 +99,6 @@ function renderBoard(board, selector) {
         tdClassName += " clicked"
         spanOfContentClassName = null
       }
-      if (gLevel.size === BEGINNER_LEVEL) tdClassName += " beginner-td"
-      else if (gLevel.size === MEDIUM_LEVEL) tdClassName += "  medium-td"
-      else tdClassName += " expert-td"
 
       // check if it is a mine/empty cel/mines negs
       if (cell.isMine) {
@@ -124,8 +121,9 @@ function checkGameOver() {
   // prettier-ignore
   if (
     g_Game.markedCount === gLevel.mines &&
-    g_Game.shownCount === gLevel.size * gLevel.size - gLevel.mines
+    g_Game.shownCount === (gLevel.size * gLevel.size) - gLevel.mines
   ) {
+    finishGameAudio.play()
     return true
   } else {
     return false
@@ -134,10 +132,11 @@ function checkGameOver() {
 
 function cellClicked(elCell, rowIdx, colIdx) {
   //  Marked cell can't be clicked
+  if (gMinesStepCount === 0) return
   if (gBoard[rowIdx][colIdx].isMarked) return
   if (gBoard[rowIdx][colIdx].isShown) return
-  gFirstClick++
   // Checked if it is te first click
+  gFirstClick++
   if (gFirstClick === 1) {
     gBoard[rowIdx][colIdx].isShown = true
     g_Game.shownCount++
@@ -158,15 +157,35 @@ function cellClicked(elCell, rowIdx, colIdx) {
   } else {
     // if step on a mine
     if (gBoard[rowIdx][colIdx].isMine) {
-      gMinesStepCount++
-      gLevel.mines--
-      var elLives = document.getElementById("hearts")
-      if (gMinesStepCount === 1) elLives.innerText = HEART + HEART
-      else if (gMinesStepCount === 2) elLives.innerText = HEART
-      else if (gMinesStepCount === 3) elLives.innerText = "Finish Lives !"
+      gMinesStepCount--
+      stepOnMineAudio.play()
       var selectorGameOver = document.querySelector(".game-over")
       selectorGameOver.innerText = SHOCK_FACE
-      clearInterval(gInterval)
+      if (gMinesStepCount > 0) {
+        setTimeout(() => {
+          selectorGameOver.innerText = HAPPY_FACE
+        }, "1000")
+      }
+      gLevel.mines--
+
+      var elLives = document.getElementById("hearts")
+      if (gMinesStepCount === 1 && gLevel.size === BEGINNER_LEVEL) {
+        elLives.innerText = HEART
+      } else if (gMinesStepCount === 2 && gLevel.size !== BEGINNER_LEVEL) {
+        elLives.innerText = HEART + HEART
+      }
+      if (gMinesStepCount === 0 && gLevel.size === BEGINNER_LEVEL) {
+        gLevel.mines++
+        selectorGameOver.innerText = SHOCK_FACE
+        elLives.innerText = "Finish Lives !"
+        selectorGameOver.innerText = SHOCK_FACE + "\n Game is Over \n click on me to restart"
+        clearInterval(gInterval)
+      } else if (gMinesStepCount === 1) elLives.innerText = HEART
+      else if (gMinesStepCount === 0) {
+        selectorGameOver.innerText = SHOCK_FACE + "\n Game is Over \n click on me to restart"
+        elLives.innerText = "Finish Lives !"
+        clearInterval(gInterval)
+      }
     }
 
     // Checked if it is empty cell
@@ -189,7 +208,7 @@ function cellClicked(elCell, rowIdx, colIdx) {
       // if win !
       clearInterval(gInterval)
       var selectorGameOver = document.querySelector(".game-over")
-      selectorGameOver.innerText = COOL_FACE
+      selectorGameOver.innerText = COOL_FACE + "\n You are a Winner"
     }
   }
 }
@@ -211,12 +230,13 @@ function cellMarked(elCell, ev, i, j) {
       // if win !
       clearInterval(gInterval)
       var selectorGameOver = document.querySelector(".game-over")
-      selectorGameOver.innerText = COOL_FACE
+      selectorGameOver.innerText = COOL_FACE + "\n You are a Winner"
     }
   }
 }
 
 function chooseLevel(level) {
+  var elLives = document.getElementById("hearts")
   if (level === BEGINNER_LEVEL) {
     gLevel.size = BEGINNER_LEVEL
     gLevel.mines = 2
@@ -224,10 +244,12 @@ function chooseLevel(level) {
   if (level === MEDIUM_LEVEL) {
     gLevel.size = MEDIUM_LEVEL
     gLevel.mines = 14
+    elLives.innerText = HEART + HEART + HEART
   }
   if (level === EXTREME_LEVEL) {
     gLevel.size = EXTREME_LEVEL
     gLevel.mines = 32
+    elLives.innerText = HEART + HEART + HEART
   }
   initGame()
 }
