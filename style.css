@@ -1,0 +1,148 @@
+* {
+  margin: auto;
+  text-align: center;
+  box-sizing: content-box;
+}
+body {
+  background-color: aquamarine;
+}
+
+h1 {
+  font-family: "Bungee Spice", cursive;
+  border: 1px solid black;
+  padding: 10px;
+  font-size: 50px;
+  background-color: rgba(45, 68, 110, 0.678);
+  margin: 20px auto 10px;
+}
+
+.beginner-table {
+  padding-top: 10px;
+  table-layout: fixed;
+  width: 50%;
+  /* background-color: rgb(67, 67, 153); */
+  margin-bottom: 20px;
+  cursor: crosshair;
+  border-spacing: 5px;
+  border-radius: 5%;
+  /* border-collapse: collapse; */
+}
+
+.medium-table {
+  padding-top: 10px;
+  table-layout: fixed;
+  width: 100%;
+  /* background-color: rgb(67, 67, 153); */
+  margin-bottom: 20px;
+  cursor: crosshair;
+  border-spacing: 5px;
+  border-radius: 5%;
+  /* border-collapse: collapse; */
+}
+
+.expert-table {
+  padding-top: 10px;
+  table-layout: fixed;
+  width: 100%;
+  /* background-color: rgb(67, 67, 153); */
+  margin-bottom: 20px;
+  cursor: crosshair;
+  border-spacing: 5px;
+  border-radius: 5%;
+  /* border-collapse: collapse; */
+}
+
+.board-container {
+  margin-top: 20px;
+  width: min-content;
+}
+
+td {
+  font-family: "Fira Sans", sans-serif;
+  font-size: larger;
+  border-radius: 10%;
+  text-align: center;
+  background-color: rgba(80, 64, 224, 0.945);
+  /* height: 30px; */
+}
+
+.beginner-td {
+  height: 30px;
+  width: 30px;
+}
+.medium-td {
+  height: 30px;
+  width: 30px;
+}
+.expert-td {
+  height: 30px;
+  width: 30px;
+}
+
+button {
+  margin: 5px;
+  font-family: "Fira Sans", sans-serif;
+  font-size: larger;
+  padding: 5px;
+  border-radius: 10px;
+  background-color: rgba(4, 103, 233, 0.904);
+  color: rgb(231, 138, 31);
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: aqua;
+}
+
+.game-over {
+  font-size: xx-large;
+  text-align: center;
+  cursor: pointer;
+  margin: auto;
+  padding: 10px;
+}
+
+.footer {
+  height: 50px;
+  background-color: rgb(9, 120, 124);
+  position: relative;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+.buttons-container {
+  margin-top: 2px;
+}
+.timer-container {
+  font-family: "Fira Sans", sans-serif;
+  position: fixed;
+  right: 20px;
+  border: 2px solid black;
+  font-size: large;
+  background-color: rgb(255, 135, 23);
+  color: black;
+  height: 50px;
+  width: 100px;
+}
+.lives-container {
+  font-family: "Fira Sans", sans-serif;
+  position: fixed;
+  left: 20px;
+  border: 2px solid black;
+  font-size: large;
+  background-color: rgb(255, 135, 23);
+  color: black;
+  height: 50px;
+  width: 100px;
+}
+
+.hidden-content {
+  display: none;
+}
+.hidden-flag {
+  display: none;
+}
+
+.clicked {
+  background-color: rgb(36, 71, 138);
+}
