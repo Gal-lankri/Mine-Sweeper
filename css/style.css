@@ -52,10 +52,9 @@ h1 {
   /* border-collapse: collapse; */
 }
 
-
 .board-container {
   margin-top: 20px;
-  width:min-content;
+  width: min-content;
 }
 
 td {
@@ -80,7 +79,6 @@ td {
   width: 30px;
 }
 
-
 button {
   margin: 5px;
   font-family: "Fira Sans", sans-serif;
@@ -103,7 +101,6 @@ button:hover {
   margin: auto;
   padding: 10px;
 }
-
 
 .footer {
   height: 50px;
