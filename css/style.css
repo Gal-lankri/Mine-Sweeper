@@ -1,6 +1,7 @@
 * {
   margin: auto;
   text-align: center;
+  box-sizing: content-box;
 }
 body {
   background-color: aquamarine;
@@ -12,25 +13,73 @@ h1 {
   padding: 10px;
   font-size: 50px;
   background-color: rgba(45, 68, 110, 0.678);
-  margin: 20px auto;
+  margin: 20px auto 10px;
 }
 
-table {
+.beginner-table {
+  padding-top: 10px;
   table-layout: fixed;
   width: 50%;
-  background-color: rgb(105, 105, 236);
+  /* background-color: rgb(67, 67, 153); */
   margin-bottom: 20px;
   cursor: crosshair;
-  border-collapse: collapse;
-  border: 1px outset black;
+  border-spacing: 5px;
+  border-radius: 5%;
+  /* border-collapse: collapse; */
+}
+
+.medium-table {
+  padding-top: 10px;
+  table-layout: fixed;
+  width: 100%;
+  /* background-color: rgb(67, 67, 153); */
+  margin-bottom: 20px;
+  cursor: crosshair;
+  border-spacing: 5px;
+  border-radius: 5%;
+  /* border-collapse: collapse; */
+}
+
+.expert-table {
+  padding-top: 10px;
+  table-layout: fixed;
+  width: 100%;
+  /* background-color: rgb(67, 67, 153); */
+  margin-bottom: 20px;
+  cursor: crosshair;
+  border-spacing: 5px;
+  border-radius: 5%;
+  /* border-collapse: collapse; */
+}
+
+
+.board-container {
+  margin-top: 20px;
+  width:min-content;
 }
 
 td {
-  box-sizing: content-box;
-  border: 1px outset black;
-  padding: 10px 0;
-  width: 33%;
+  font-family: "Fira Sans", sans-serif;
+  font-size: larger;
+  border-radius: 10%;
+  text-align: center;
+  background-color: rgba(80, 64, 224, 0.945);
+  /* height: 30px; */
 }
+
+.beginner-td {
+  height: 30px;
+  width: 30px;
+}
+.medium-td {
+  height: 30px;
+  width: 30px;
+}
+.expert-td {
+  height: 30px;
+  width: 30px;
+}
+
 
 button {
   margin: 5px;
@@ -48,25 +97,18 @@ button:hover {
 }
 
 .game-over {
+  font-size: xx-large;
   text-align: center;
-  background-color: black;
-  padding: 10px;
   cursor: pointer;
   margin: auto;
-  height: 20x;
-  width: 20px;
+  padding: 10px;
 }
 
-.board-container {
-  margin-top: 20px;
-  width: 30%;
-  height: 30%;
-}
 
 .footer {
   height: 50px;
   background-color: rgb(9, 120, 124);
-  position: fixed;
+  position: relative;
   left: 0;
   bottom: 0;
   width: 100%;
@@ -85,14 +127,25 @@ button:hover {
   height: 50px;
   width: 100px;
 }
+.lives-container {
+  font-family: "Fira Sans", sans-serif;
+  position: fixed;
+  left: 20px;
+  border: 2px solid black;
+  font-size: large;
+  background-color: rgb(255, 135, 23);
+  color: black;
+  height: 50px;
+  width: 100px;
+}
 
 .hidden-content {
-  visibility: hidden;
+  display: none;
 }
 .hidden-flag {
-  visibility: hidden;
+  display: none;
 }
 
 .clicked {
-  background-color: rgba(100, 148, 237, 0.507);
+  background-color: rgb(36, 71, 138);
 }

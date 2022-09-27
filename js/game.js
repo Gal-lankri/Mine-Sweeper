@@ -1,9 +1,10 @@
 "use strict"
 
-const EASY_LEVEL = 4
-const HURD_LEVEL = 8
+const BEGINNER_LEVEL = 4
+const MEDIUM_LEVEL = 8
 const EXTREME_LEVEL = 12
 
+const HEART = "💖"
 const FLAG = "🚩"
 const MINE = "💣"
 const NUM1 = "1️"
@@ -17,8 +18,9 @@ const COOL_FACE = "😎"
 var gBoard
 var gInterval
 var gFirstClick = 0
+var gMinesStepCount = 0
 
-const G_GAME = {
+const g_Game = {
   isOn: false,
   shownCount: 0,
   markedCount: 0,
@@ -28,14 +30,23 @@ const gLevel = {
   size: 4,
   mines: 2,
 }
+function resetG_Game() {
+  g_Game.markedCount = 0
+  g_Game.shownCount = 0
+  g_Game.secsPassed = 0
+  var elLives = document.getElementById("hearts")
+  elLives.innerText = HEART + HEART + HEART
+  gMinesStepCount = 0
+}
 
 function initGame() {
+  g_Game.isOn ? resetG_Game() : (g_Game.isOn = true)
+
   gFirstClick = 0
   var selGameOver = document.querySelector(".game-over")
   selGameOver.innerText = HAPPY_FACE
   clearInterval(gInterval)
 
-  G_GAME.isOn = true
   gBoard = buildBoard(gLevel.size)
 
   renderBoard(gBoard, ".board-container")
@@ -58,32 +69,47 @@ function buildBoard(size) {
       }
     }
   }
-  getRandomMines(board, gLevel)
-  // setting the Neighbors of the mines
-  for (var i = 0; i < board.length; i++) {
-    for (var j = 0; j < board[i].length; j++) {
-      if (board[i][j].isMine) {
-        setMinesNegsCount(board, i, j)
-      }
-    }
-  }
+  // getRandomMines(board, gLevel)
+  // // setting the Neighbors of the mines
+  // for (var i = 0; i < board.length; i++) {
+  //   for (var j = 0; j < board[i].length; j++) {
+  //     if (board[i][j].isMine) {
+  //       setMinesNegsCount(board, i, j)
+  //     }
+  //   }
+  // }
 
   return board
 }
 // update the DOM
-function renderBoard(gBoard, selector) {
-  var strHTML = "<table><tbody>"
-  for (var i = 0; i < gBoard.length; i++) {
+function renderBoard(board, selector) {
+  // checking the size of the board
+  if (gLevel.size === BEGINNER_LEVEL) var strHTML = "<table class='beginner-table'><tbody>"
+  else if (gLevel.size === MEDIUM_LEVEL) var strHTML = "<table class='medium-table'><tbody>"
+  else var strHTML = "<table class='expert-table'><tbody>"
+  for (var i = 0; i < board.length; i++) {
     strHTML += "<tr>"
-    for (var j = 0; j < gBoard[0].length; j++) {
-      const cell = gBoard[i][j]
-      const className = "cell cell-" + i + "-" + j
+    for (var j = 0; j < board[i].length; j++) {
+      // add classs
+      var cell = board[i][j]
+      var tdClassName = "cell cell-" + i + "-" + j
+      var spanOfContentClassName = 'class="hidden-content"'
+
+      if (cell.isShown) {
+        tdClassName += " clicked"
+        spanOfContentClassName = null
+      }
+      if (gLevel.size === BEGINNER_LEVEL) tdClassName += " beginner-td"
+      else if (gLevel.size === MEDIUM_LEVEL) tdClassName += "  medium-td"
+      else tdClassName += " expert-td"
+
+      // check if it is a mine/empty cel/mines negs
       if (cell.isMine) {
-        strHTML += `<td class="${className}" onclick="cellClicked(this,${i},${j})" oncontextmenu="event.preventDefault();" onmouseup="cellMarked(this, event, ${i}, ${j})"><span class="hidden-content">${MINE}</span><span class="hidden-flag">${FLAG}</span></td>`
+        strHTML += `<td class="${tdClassName}" onclick="cellClicked(this,${i},${j})" oncontextmenu="event.preventDefault();" onmouseup="cellMarked(this, event, ${i}, ${j})"><span ${spanOfContentClassName}>${MINE}</span><span class="hidden-flag">${FLAG}</span></td>`
       } else if (cell.minesAroundCount > 0) {
-        strHTML += `<td class="${className}" onclick="cellClicked(this,${i},${j})" oncontextmenu="event.preventDefault();" onmouseup="cellMarked(this, event, ${i}, ${j})"><span class="hidden-content">${cell.minesAroundCount}</span><span class="hidden-flag">${FLAG}</span></td>`
+        strHTML += `<td class="${tdClassName}" onclick="cellClicked(this,${i},${j})" oncontextmenu="event.preventDefault();" onmouseup="cellMarked(this, event, ${i}, ${j})"><span ${spanOfContentClassName}>${cell.minesAroundCount}</span><span class="hidden-flag">${FLAG}</span></td>`
       } else {
-        strHTML += `<td class="${className}" onclick="cellClicked(this,${i},${j})" oncontextmenu="event.preventDefault();" onmouseup="cellMarked(this, event, ${i}, ${j})"><span class="hidden-content">${EMPTY}</span><span class="hidden-flag">${FLAG}</span></td>`
+        strHTML += `<td class="${tdClassName}" onclick="cellClicked(this,${i},${j})" oncontextmenu="event.preventDefault();" onmouseup="cellMarked(this, event, ${i}, ${j})"><span ${spanOfContentClassName}>${EMPTY}</span><span class="hidden-flag">${FLAG}</span></td>`
       }
     }
     strHTML += "</tr>"
@@ -96,73 +122,106 @@ function renderBoard(gBoard, selector) {
 
 function checkGameOver() {
   // prettier-ignore
-  if (G_GAME.markedCount === gLevel.mines && G_GAME.shownCount === (gLevel.size * gLevel.size) - gLevel.mines) {
-    console.log(G_GAME.markedCount)
+  if (
+    g_Game.markedCount === gLevel.mines &&
+    g_Game.shownCount === gLevel.size * gLevel.size - gLevel.mines
+  ) {
     return true
-  } else {return false}
+  } else {
+    return false
+  }
 }
 
-function cellClicked(elCell, i, j) {
+function cellClicked(elCell, rowIdx, colIdx) {
   //  Marked cell can't be clicked
-  if (gBoard[i][j].isMarked) return
-  // if step on a mine
-  if (gBoard[i][j].isMine) {
-    clearInterval(gInterval)
-    var selGameOver = document.querySelector(".game-over")
-    selGameOver.innerText = SHOCK_FACE
-  }
-  G_GAME.shownCount++
-  elCell.classList.add("clicked")
-  // Checked if it is te first click
+  if (gBoard[rowIdx][colIdx].isMarked) return
+  if (gBoard[rowIdx][colIdx].isShown) return
   gFirstClick++
+  // Checked if it is te first click
   if (gFirstClick === 1) {
+    gBoard[rowIdx][colIdx].isShown = true
+    g_Game.shownCount++
+    expandShown(gBoard, elCell, rowIdx, colIdx)
+    getRandomMines(gBoard, gLevel)
+
+    // setting the Neighbors of the mines
+    for (var i = 0; i < gBoard.length; i++) {
+      for (var j = 0; j < gBoard[i].length; j++) {
+        if (gBoard[i][j].isMine) {
+          setMinesNegsCount(gBoard, i, j)
+        }
+      }
+    }
+    renderBoard(gBoard, ".board-container")
+
     setTimer()
-  }
+  } else {
+    // if step on a mine
+    if (gBoard[rowIdx][colIdx].isMine) {
+      gMinesStepCount++
+      var elLives = document.getElementById("hearts")
+      if (gMinesStepCount === 1) elLives.innerText = HEART + HEART
+      else if (gMinesStepCount === 2) elLives.innerText = HEART
+      else if (gMinesStepCount === 3) elLives.innerText = "Finish Lives !"
+      var selectorGameOver = document.querySelector(".game-over")
+      selectorGameOver.innerText = SHOCK_FACE
+      clearInterval(gInterval)
+    }
 
-  // Checked if it is empty cell
-  if (
-    elCell.innerHTML === `<span class="hidden-content"></span><span class="hidden-flag">🚩</span>`
-  ) {
-    expandShown(gBoard, elCell, i, j)
-  }
+    // Checked if it is empty cell
+    if (
+      elCell.innerHTML ===
+      `<span class="hidden-content"></span><span class="hidden-flag">${FLAG}</span>`
+    ) {
+      expandShown(gBoard, elCell, rowIdx, colIdx)
+    }
 
-  // update model
-  gBoard[i][j].isShown = true
-  // update DOM
-  var elSpan = elCell.getElementsByTagName("span")
-  elSpan[0].classList.remove("hidden-content")
+    // update model
+    g_Game.shownCount++
+    gBoard[rowIdx][colIdx].isShown = true
+    // update DOM
+    elCell.classList.add("clicked")
+    var elSpan = elCell.getElementsByTagName("span")
+    elSpan[0].classList.remove("hidden-content")
 
-  if (checkGameOver()) {
-    // if win !
-    clearInterval(gInterval)
-    var selGameOver = document.querySelector(".game-over")
-    selGameOver.innerText = COOL_FACE
+    if (checkGameOver()) {
+      // if win !
+      clearInterval(gInterval)
+      var selectorGameOver = document.querySelector(".game-over")
+      selectorGameOver.innerText = COOL_FACE
+    }
   }
 }
 function cellMarked(elCell, ev, i, j) {
   // checked if it is the right button on the mouse
   if (ev.button === 2) {
     if (gBoard[i][j].isShown) return
+    var elSpan = elCell.getElementsByTagName("span")
     if (gBoard[i][j].isMarked) {
-      G_GAME.markedCount--
+      g_Game.markedCount--
       gBoard[i][j].isMarked = false
-      var elSpan = elCell.getElementsByTagName("span")
-      elSpan[1].classList.remove("hidden-flag")
-    } else {
-      G_GAME.markedCount++
-      gBoard[i][j].isMarked = true
       elSpan[1].classList.add("hidden-flag")
+    } else {
+      g_Game.markedCount++
+      gBoard[i][j].isMarked = true
+      elSpan[1].classList.remove("hidden-flag")
+    }
+    if (checkGameOver()) {
+      // if win !
+      clearInterval(gInterval)
+      var selectorGameOver = document.querySelector(".game-over")
+      selectorGameOver.innerText = COOL_FACE
     }
   }
 }
 
 function chooseLevel(level) {
-  if (level === EASY_LEVEL) {
-    gLevel.size = EASY_LEVEL
+  if (level === BEGINNER_LEVEL) {
+    gLevel.size = BEGINNER_LEVEL
     gLevel.mines = 2
   }
-  if (level === HURD_LEVEL) {
-    gLevel.size = HURD_LEVEL
+  if (level === MEDIUM_LEVEL) {
+    gLevel.size = MEDIUM_LEVEL
     gLevel.mines = 14
   }
   if (level === EXTREME_LEVEL) {
@@ -178,7 +237,7 @@ function setTimer() {
   gInterval = setInterval(() => {
     var currTime = Date.now()
     var seconds = parseInt((currTime - start) / 1000)
-    G_GAME.secsPassed = seconds
+    g_Game.secsPassed = seconds
     timer.innerText = `Time :\n ${seconds}`
   }, 1000)
 }
