@@ -159,6 +159,7 @@ function cellClicked(elCell, rowIdx, colIdx) {
     // if step on a mine
     if (gBoard[rowIdx][colIdx].isMine) {
       gMinesStepCount++
+      gLevel.mines--
       var elLives = document.getElementById("hearts")
       if (gMinesStepCount === 1) elLives.innerText = HEART + HEART
       else if (gMinesStepCount === 2) elLives.innerText = HEART

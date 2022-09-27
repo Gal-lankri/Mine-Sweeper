@@ -23,7 +23,7 @@ h1 {
   /* background-color: rgb(67, 67, 153); */
   margin-bottom: 20px;
   cursor: crosshair;
-  border-spacing: 5px;
+  border-spacing: 3px;
   border-radius: 5%;
   /* border-collapse: collapse; */
 }
@@ -35,7 +35,7 @@ h1 {
   /* background-color: rgb(67, 67, 153); */
   margin-bottom: 20px;
   cursor: crosshair;
-  border-spacing: 5px;
+  border-spacing: 3px;
   border-radius: 5%;
   /* border-collapse: collapse; */
 }
@@ -47,7 +47,7 @@ h1 {
   /* background-color: rgb(67, 67, 153); */
   margin-bottom: 20px;
   cursor: crosshair;
-  border-spacing: 5px;
+  border-spacing: 3px;
   border-radius: 5%;
   /* border-collapse: collapse; */
 }
@@ -62,7 +62,8 @@ td {
   font-size: larger;
   border-radius: 10%;
   text-align: center;
-  background-color: rgba(80, 64, 224, 0.945);
+  background-color: rgb(65, 29, 150);
+  border-style: outset;
   /* height: 30px; */
 }
 
@@ -144,5 +145,6 @@ button:hover {
 }
 
 .clicked {
-  background-color: rgb(36, 71, 138);
+  border-style: inset;
+  background-color: rgba(65, 29, 150, 0.438);
 }
